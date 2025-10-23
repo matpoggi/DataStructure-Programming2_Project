@@ -1,10 +1,9 @@
 #include <stdio.h>
 
-
+// MAIN FUNCTION //
 int main() {
-    printf("Hello, World!\n");
-    printf("Test");
-    printf("test2");
-    printf("salem");
+
+    printf("Hello World!\n");
+
     return 0;
 }
