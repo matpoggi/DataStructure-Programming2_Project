@@ -29,7 +29,7 @@ void addcell(t_list *list, t_cell *cell) {
   return;
 }
 
-void display(t_list *list) {
+void display_list(t_list *list) {
   t_cell *temp = list->head;
   while (temp != NULL) {
     printf("%d ", temp->value);
