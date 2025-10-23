@@ -12,7 +12,7 @@ typedef struct {
     t_cell *head;
 } t_list;
 
-typedef struct adjacency_list {
+typedef struct {
     int size;
     t_list *array;
-};
+}adjacency_list;

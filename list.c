@@ -38,3 +38,19 @@ void display_list(t_list *list) {
   return;
 }
 
+adjacency_list create_empty_adjacency_list(int size) {
+  adjacency_list * adjlist;
+  adjlist->size = size;
+  adjlist = malloc(sizeof(adjacency_list));
+  for (int i = 0; i < size; i++) {
+    adjlist->array[i] = createList();
+  }
+  return *adjlist;
+}
+
+void display_adjacency_list(adjacency_list adjlist) {
+  for (int i = 0; i < adjlist.size; i++) {
+    display_list(&adjlist.array[i]);
+  }
+  return;
+}
