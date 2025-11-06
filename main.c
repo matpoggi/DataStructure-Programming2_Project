@@ -14,9 +14,11 @@ int main() {
 
     printf("[main-----] Starting program...\n\n");
 
-    readGraph("../data/exemple1.txt");
+    adjacency_list G = readGraph("../data/exemple1.txt");
 
     printf("\n[main-----] Graph loaded successfully.\n");
+
+    ismarkov(G);
 
     return 0;
 }

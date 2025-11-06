@@ -114,3 +114,25 @@ adjacency_list readGraph(const char *filename) {
     displayAdjacencyList(adjlist);
     return adjlist;
 }
+
+int ismarkov (adjacency_list adjlist) {
+    int truemarkov = 1;
+    for (int i = 0; i < adjlist.size; i++) {
+        float proba = 0.0;
+        t_cell *curr = adjlist.array[i].head;
+        while (curr != NULL) {
+            proba += curr->proba;
+            curr = curr->next;
+        }
+        if (proba <0.99 || proba > 1.00) {
+            truemarkov = 0;
+            printf ("the sum of the probability of the vertex %d is %.2f \n", i+1, proba);
+        }
+    }
+    if (truemarkov == 1) {
+        printf ("The graph is a Markov graph\n");
+    }else{
+        printf ("The graph is not a Markov graph\n");
+    }
+    return truemarkov;
+}
