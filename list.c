@@ -115,6 +115,7 @@ adjacency_list readGraph(const char *filename) {
     return adjlist;
 }
 
+// CHECK IF THE GRAPH IS A MARKOV GRAPH
 int ismarkov (adjacency_list adjlist) {
     int truemarkov = 1;
     for (int i = 0; i < adjlist.size; i++) {
