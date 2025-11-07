@@ -137,3 +137,12 @@ int ismarkov (adjacency_list adjlist) {
     }
     return truemarkov;
 }
+
+void drawGraph(adjacency_list adjlist) {
+    FILE *file = fopen("graph.txt", "w");
+    if (file == NULL) {
+        perror("Could not open file for writing");
+    }
+    fprintf(file, " --- \nconfig: \n   layout: elk \n   theme: neo \n   look: neo \n---\n\n flowchart LR");
+
+}
