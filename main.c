@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "list.h"
+#include "utils.h"
 
 #include <unistd.h>
 #include <limits.h>
@@ -14,11 +15,13 @@ int main() {
 
     printf("[main-----] Starting program...\n\n");
 
-    adjacency_list G = readGraph("../data/exemple1.txt");
+    adjacency_list G = readGraph("../data/exemple_valid_step3.txt");
 
     printf("\n[main-----] Graph loaded successfully.\n");
 
-    ismarkov(G);
+    isMarkov(G);
+
+    drawGraph(G);
 
     return 0;
 }

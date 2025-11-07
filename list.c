@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
+#include "utils.c"
 
 // CREATE A CELL (EDGE)
 t_cell* createCell(int end, float proba) {
@@ -110,13 +111,12 @@ adjacency_list readGraph(const char *filename) {
 
     fclose(file);
     printf("[readGraph] Done reading file.\n");
-
     displayAdjacencyList(adjlist);
     return adjlist;
 }
 
 // CHECK IF THE GRAPH IS A MARKOV GRAPH
-int ismarkov (adjacency_list adjlist) {
+int isMarkov (adjacency_list adjlist) {
     int truemarkov = 1;
     for (int i = 0; i < adjlist.size; i++) {
         float proba = 0.0;
@@ -139,10 +139,40 @@ int ismarkov (adjacency_list adjlist) {
 }
 
 void drawGraph(adjacency_list adjlist) {
-    FILE *file = fopen("graph.txt", "w");
+
+    FILE *file = fopen("../output/graph.txt", "w");
     if (file == NULL) {
         perror("Could not open file for writing");
     }
-    fprintf(file, " --- \nconfig: \n   layout: elk \n   theme: neo \n   look: neo \n---\n\n flowchart LR");
+    fprintf(file, "--- \nconfig: \n   layout: elk \n   theme: neo \n   look: neo \n---\n\nflowchart LR");
+
+    for (int i = 0; i < adjlist.size; i++) {
+        int vertex_index = i + 1;
+        char * vertex_letter;
+        vertex_letter = getID(vertex_index);
+        fprintf(file,"\n%s((%d))",vertex_letter, vertex_index);
+    }
+
+    fprintf(file,"\n\n");
+
+    // WIP
+
+    for (int vertex_index = 1; vertex_index <= adjlist.size; vertex_index++) {
+
+        t_list *edge_list = &adjlist.array[vertex_index - 1];
+        t_cell *edge_curr = edge_list->head;
+        while (edge_curr != NULL) {
+
+            char * vertex_letter = getID(vertex_index);
+            fprintf(file,"%s -->|",vertex_letter);
+
+            char * edge_letter = getID(edge_curr->end);
+            fprintf(file,"%.2f|%s\n", edge_curr->proba, edge_letter);
+
+            edge_curr = edge_curr->next;
+
+        }
+
+    }
 
 }

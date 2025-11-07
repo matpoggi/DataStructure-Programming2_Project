@@ -24,6 +24,7 @@ void displayList(t_list *list);
 adjacency_list createEmptyAdjacencyList(int size);
 void displayAdjacencyList(adjacency_list adjlist);
 adjacency_list readGraph(const char *filename);
-int ismarkov (adjacency_list adjlist);
+int isMarkov (adjacency_list adjlist);
+void drawGraph(adjacency_list adjlist);
 
 #endif
