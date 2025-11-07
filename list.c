@@ -4,6 +4,16 @@
 #include "utils.c"
 
 t_cell* createCell(int end, float proba) {
+    /**
+    * @brief Allocate and initialize a singly linked-list cell representing an outgoing edge.
+    * Creates a new t_cell with the given destination vertex index and transition probability. Sets next to NULL. Returns the allocated pointer. Terminates the program if allocation fails.
+    * @param end Destination vertex index.
+    * @param proba Transition probability to the destination vertex.
+    * @return t_cell* Pointer to the newly allocated cell.
+    * @post Returned cell has next == NULL.
+    * @warning Calls exit(EXIT_FAILURE) if memory allocation fails.
+    */
+
     t_cell *cell = malloc(sizeof(t_cell));
     if (!cell) {
         perror("malloc failed");
@@ -16,12 +26,31 @@ t_cell* createCell(int end, float proba) {
 }
 
 t_list createEmptyList() {
+    /**
+    * @brief Create and return an empty linked list.
+    * Initializes a t_list with head set to NULL and returns it by value.
+    * @return t_list An empty list (head == NULL).
+    * @post Returned list’s head is NULL.
+    */
+
     t_list list;
     list.head = NULL;
     return list;
 }
 
 void addCell(t_list *list, int end, float proba) {
+    /**
+    * @brief Append a new cell (end, proba) to the end of a list.
+    * Allocates a cell using createCell and inserts it at the tail. If the list is empty, it becomes the head.
+    * @param list Pointer to the target list (must not be NULL).
+    * @param end Destination vertex index.
+    * @param proba Transition probability to end.
+    * @return void
+    * @pre list != NULL.
+    * @post The list gains an additional element at its tail.
+    * @throws Terminates if allocation fails (via createCell).
+    */
+
     t_cell *newcell = createCell(end, proba);
 
     if (list->head == NULL) {
@@ -36,6 +65,13 @@ void addCell(t_list *list, int end, float proba) {
 }
 
 void displayList(t_list *list) {
+    /**
+    * @brief Print the list as arrows with (end, proba) pairs.
+    * Iterates through the list, printing each cell to stdout, followed by a newline.
+    * @param list Pointer to the list to display (may be empty).
+    * @return void
+    */
+
     t_cell *temp = list->head;
     while (temp != NULL) {
         printf("-> (%d, %.2f) ", temp->end, temp->proba);
@@ -45,6 +81,16 @@ void displayList(t_list *list) {
 }
 
 adjacency_list createEmptyAdjacencyList(int size) {
+    /**
+    * @brief Create an empty adjacency list of given size.
+    * Allocates an array of t_list, initializes each entry to empty. Returns the adjacency_list. Terminates the program if allocation fails.
+    * @param size Number of vertices (array length).
+    * @return adjacency_list The initialized adjacency list.
+    * @pre size >= 0.
+    * @post Each array[i] is an empty list.
+    * @warning Calls exit(EXIT_FAILURE) if allocation fails.
+    */
+
     adjacency_list adjlist;
     adjlist.size = size;
     adjlist.array = malloc(size * sizeof(t_list));
@@ -61,6 +107,13 @@ adjacency_list createEmptyAdjacencyList(int size) {
 }
 
 void displayAdjacencyList(adjacency_list adjlist) {
+    /**
+    * @brief Display the entire adjacency list vertex by vertex.
+    * For each vertex, prints its index and the list of outgoing edges.
+    * @param adjlist The adjacency list to display.
+    * @return void
+    */
+
     printf("\n[AdjaListDisp] Adjacency List:\n");
     for (int i = 0; i < adjlist.size; i++) {
         printf("[AdjaListDisp] Vertex %d ", i + 1);
@@ -69,6 +122,15 @@ void displayAdjacencyList(adjacency_list adjlist) {
 }
 
 adjacency_list readGraph(const char *filename) {
+    /**
+    * @brief Read a graph from a text file and construct its adjacency list.
+    * Expects vertex count in first token. Each subsequent line: "start end proba" (all 1-based indices). Sorts each vertex’s list by ascending probability after reading.
+    * @param filename Path to the input file (text mode).
+    * @return adjacency_list The loaded and sorted adjacency list.
+    * @throws Terminates if file fails to open or if vertex count cannot be read.
+    * @warning Stops processing on out-of-bounds start index.
+    */
+
     printf("\n---------------------------------------\n[readGraph---] Opening file: %s\n", filename);
 
     FILE *file = fopen(filename, "rt");
@@ -112,6 +174,14 @@ adjacency_list readGraph(const char *filename) {
 }
 
 void isMarkov (adjacency_list adjlist) {
+    /**
+    * @brief Check whether the graph is Markovian (sum of outgoing probabilities ≈ 1 for each vertex).
+    * Sums outgoing probabilities for each vertex and checks if sum is in [0.99, 1.00]. Confirms if the graph passes or not.
+    * @param adjlist The adjacency list.
+    * @return void
+    * @note Accepts sums ≤ 1.00 and ≥ 0.99; otherwise, rejects.
+    */
+
     int truemarkov = 1;
     for (int i = 0; i < adjlist.size; i++) {
         printf("[markov------] Vertex %d :\n", i + 1);
@@ -138,6 +208,14 @@ void isMarkov (adjacency_list adjlist) {
 }
 
 void drawGraph(adjacency_list adjlist) {
+    /**
+    * @brief Generate a Mermaid flowchart file describing the graph for visualization.
+     * Writes to "../output/graph.txt" a diagram with layout and theme information, nodes, and edges labeled by probability. Uses getID(int) to label vertices.
+    * @param adjlist The graph to render.
+    * @return void
+    * @warning Output path is relative: "../output/graph.txt" must exist.
+    */
+
 
     FILE *file = fopen("../output/graph.txt", "w");
     if (file == NULL) {
@@ -178,30 +256,33 @@ void drawGraph(adjacency_list adjlist) {
 }
 
 void removeCell(t_cell *cell, t_list *list) {
-    if (list->head == NULL || cell == NULL) return;
+    if (!list || !list->head || !cell) return;
 
     if (cell == list->head) {
         list->head = list->head->next;
+        free(cell);
         return;
     }
 
-    t_cell *prev_cell = list->head;
-    t_cell *current_cell = list->head->next;
+    t_cell *prev = list->head;
+    t_cell *cur  = list->head->next;
 
-    while (current_cell != NULL && current_cell != cell) {
-        prev_cell = current_cell;
-        current_cell = current_cell->next;
+    while (cur && cur != cell) {
+        prev = cur;
+        cur = cur->next;
     }
 
-    if (current_cell == cell) {
-        prev_cell->next = current_cell->next;
+    if (cur == cell) {
+        prev->next = cur->next;
+        free(cur);
     }
 }
 
-t_list *sortList(t_list list) {
 
+
+t_list *sortList(t_list list) {
     t_list *sorted_list = malloc(sizeof(t_list));
-    if (sorted_list == NULL) {
+    if (!sorted_list) {
         return NULL;
     }
 
@@ -224,3 +305,4 @@ t_list *sortList(t_list list) {
 
     return sorted_list;
 }
+
