@@ -1,25 +1,44 @@
 #include <stdio.h>
+#include <string.h>
 #include "list.h"
 #include "utils.h"
 
 #include <unistd.h>
 #include <limits.h>
 
-// MAIN FUNCTION //
+// MAIN FUNCTION
 int main() {
 
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("[main-----] Current working directory: %s\n", cwd);
+    printf("---------------------------------------\n--        Starting program...        -- \n---------------------------------------\n");
+
+    char filepath[200];
+    char prefix[] = "..\\data\\";
+    char fullpath[250];
+
+    printf("[main--------] Please enter a file path\n->");
+
+    fgets(filepath, sizeof(filepath), stdin);
+
+    for (int i = 0; filepath[i] != '\0'; i++) {
+        if (filepath[i] == '/') {
+            filepath[i] = '\\';
+        }
     }
 
-    printf("[main-----] Starting program...\n\n");
+    filepath[strcspn(filepath, "\n")] = 0;
 
-    adjacency_list G = readGraph("../data/exemple_valid_step3.txt");
+    strcpy(fullpath, prefix);
+    strcat(fullpath, filepath);
 
-    printf("\n[main-----] Graph loaded successfully.\n");
+    printf("\n---------------------------------------\n[main--------] Starting readGraph...");
+
+    adjacency_list G = readGraph(fullpath);
+
+    printf("---------------------------------------\n[main--------] Starting isMarkov check.\n---------------------------------------\n");
 
     isMarkov(G);
+
+    printf("---------------------------------------\n[main--------] Starting drawGraph.\n---------------------------------------\n");
 
     drawGraph(G);
 
