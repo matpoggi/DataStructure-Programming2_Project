@@ -1,11 +1,13 @@
 #ifndef __HASSE_H__
 #define __HASSE_H__
 
-typedef struct {
+typedef struct s_tarjan_vertex{
     int id;
     int nb;
     int accessnb;
     int boolindic;
+    struct s_tarjan_vertex *next;
+    // struct s_tarjan_vertex *prev;
 }t_tarjan_vertex;
 
 typedef struct {
@@ -17,6 +19,7 @@ typedef struct {
     t_link *links;
     int log_size;
     int capacity;
+    struct s_tarjan_vertex *head;
 } t_link_array;
 
 
