@@ -1,6 +1,6 @@
 #include <malloc.h>
 #include "hasse.h"
-
+#include "list.h"
 
 void removeTransitiveLinks(t_link_array *p_link_array)
 {
@@ -46,4 +46,11 @@ void removeTransitiveLinks(t_link_array *p_link_array)
             i++;
         }
     }
+}
+
+t_tarjan_vertex *createarraytarjan (int n) {
+  t_tarjan_vertex *array = malloc(n * sizeof(t_tarjan_vertex));
+  for (int i = 0; i < n; i++){
+
+  }
 }

@@ -1,6 +1,15 @@
 #ifndef __HASSE_H__
 #define __HASSE_H__
 
+typedef struct {
+    int id;
+    int nb;
+    int accessnb;
+    int boolindic;
+}t_tarjan_vertex;
+
+
+
 void removeTransitiveLinks(t_link_array *p_link_array);
 
 /**
