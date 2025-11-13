@@ -47,3 +47,15 @@ void removeTransitiveLinks(t_link_array *p_link_array)
         }
     }
 }
+
+t_tarjan_vertex *initiarray (adjacency_list *adj_list) {
+    int size = adj_list->size;
+    t_tarjan_vertex *arr = (t_tarjan_vertex *) malloc(sizeof(t_tarjan_vertex) * size);
+    for (int i = 0; i < size; i++) {
+        arr[i].id = i +1;
+        arr[i].nb = -1;
+        arr[i].accessnb = -1;
+        arr[i].boolindic = 0;
+    }
+    return arr;
+}
