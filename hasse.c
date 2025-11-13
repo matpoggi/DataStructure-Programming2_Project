@@ -47,10 +47,3 @@ void removeTransitiveLinks(t_link_array *p_link_array)
         }
     }
 }
-
-t_tarjan_vertex *createarraytarjan (int n) {
-  t_tarjan_vertex *array = malloc(n * sizeof(t_tarjan_vertex));
-  for (int i = 0; i < n; i++){
-
-  }
-}

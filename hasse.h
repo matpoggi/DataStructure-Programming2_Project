@@ -22,6 +22,16 @@ typedef struct {
     struct s_tarjan_vertex *head;
 } t_link_array;
 
+typedef struct {
+    char name[100];
+    int number;
+    int *container;
+}t_classes;
+
+typedef struct {
+    t_classes *classes;
+    int size;
+}t_partition;
 
 void removeTransitiveLinks(t_link_array *p_link_array);
 
