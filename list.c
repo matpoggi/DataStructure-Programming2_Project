@@ -279,7 +279,6 @@ void removeCell(t_cell *cell, t_list *list) {
 }
 
 
-
 t_list *sortList(t_list list) {
     t_list *sorted_list = malloc(sizeof(t_list));
     if (!sorted_list) {
