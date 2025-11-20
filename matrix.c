@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "list.h"
 #include "matrix.h"
+#include "math.h"
 
 t_matrix newMatrix(int row, int col){
   t_matrix matrix;
@@ -68,10 +69,16 @@ t_matrix multiplyMatrix(t_matrix *matrix1, t_matrix *matrix2){
   return m;
 }
 
-t_matrix diffmatrix(t_matrix *M, t_matrix *N){
+double diffmatrix(t_matrix *M, t_matrix *N){
   double sum = 0.0;
   if (M->row != N->row || M->col != N->col){
     printf("matrix incompatible\n");
+    return -0.01;
   }
-
+  for (int i = 0; i < M->row; i++) {
+    for (int j = 0; j < M->col; j++) {
+      sum = sum + fabs(M->value[i][j] - N->value[i][j]);
+    }
+  }
+  return sum;
 }
