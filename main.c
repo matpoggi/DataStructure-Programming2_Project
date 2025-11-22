@@ -84,20 +84,36 @@ int main() {
     // ---------------------------------------------------------
     PRINT_SECTION("PART 3: MATRIX CALCULATIONS");
 
-    // 1. Conversion Adjacency list -> Matrix
-    PRINT_STEP("Converting Graph to Matrix M:");
+    PRINT_STEP("Adjacency Matrix M (Transition Probabilities):");
     t_matrix M = adjMatrix(&G);
     printMatrix(M);
 
-    // 2. Calcul de M^3 (Probabilités après 3 étapes)
-    int steps = 3;
-    printf("[Step] Calculating M^%d (Distribution after %d steps):\n", steps, steps);
+    PRINT_STEP("Calculating M^3 (Weather in 3 days):");
+    t_matrix M3 = powerMatrix(M, 3);
+    printMatrix(M3);
 
-    t_matrix M_pow = powerMatrix(M, steps);
-    printMatrix(M_pow);
+    PRINT_STEP("Calculating M^7 (Weather in 7 days):");
+    t_matrix M7 = powerMatrix(M, 7);
+    printMatrix(M7);
 
+    PRINT_STEP("Checking for Stationary Distribution (Convergence):");
+    findStationaryDistribution(M);
+
+    PRINT_STEP("Extracting Sub-matrices for each Class:");
+    for (int i = 0; i < partition->nbClasses; i++) {
+        if (partition->classes[i].nbVertices > 0) {
+            printf("\n--- Sub-matrix for Component C%d ---\n", i + 1);
+            t_matrix subM = subMatrix(M, partition, i);
+            printMatrix(subM);
+            freeMatrix(&subM);
+        }
+    }
 
     PRINT_SECTION("END OF PROGRAM");
+
+    freeMatrix(&M);
+    freeMatrix(&M3);
+    freeMatrix(&M7);
 
 
     return 0;

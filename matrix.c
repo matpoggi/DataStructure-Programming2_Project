@@ -112,6 +112,16 @@ void printMatrix(t_matrix M) {
     printf("\n");
 }
 
+void freeMatrix(t_matrix *matrix) {
+    if (matrix == NULL || matrix->value == NULL) return;
+
+    for (int i = 0; i < matrix->row; i++) {
+        free(matrix->value[i]);
+    }
+    free(matrix->value);
+    matrix->value = NULL;
+}
+
 t_matrix powerMatrix(t_matrix M, int p) {
     if (p == 1) return copyMatrix(&M);
 
@@ -120,7 +130,63 @@ t_matrix powerMatrix(t_matrix M, int p) {
 
     for (int i = 1; i < p; i++) {
         temp = multiplyMatrix(&res, &M);
+
+        freeMatrix(&res);
         res = temp;
     }
     return res;
+}
+void findStationaryDistribution(t_matrix M) {
+    t_matrix current = copyMatrix(&M);
+    t_matrix next;
+    double diff = 1.0;
+    double epsilon = 0.01;
+    int step = 1;
+    int max_steps = 1000;
+
+    printf("\n[Stationary] Starting convergence analysis (epsilon = %.2f)...\n", epsilon);
+
+    while (diff > epsilon && step < max_steps) {
+
+        next = multiplyMatrix(&current, &M);
+
+        diff = diffmatrix(&next, &current);
+
+        free(current.value);
+        current = next;
+
+        step++;
+    }
+
+    if (step >= max_steps) {
+        printf("[Stationary] Convergence NOT reached after %d steps (Periodic graph?).\n", max_steps);
+    } else {
+        printf("[Stationary] Convergence reached at step %d (Diff = %.4f)\n", step, diff);
+        printf("Stationary Distribution Matrix:\n");
+        printMatrix(current);
+    }
+}
+
+
+t_matrix subMatrix(t_matrix matrix, t_partition *part, int class_index) {
+    if (class_index < 0 || class_index >= part->nbClasses) {
+        printf("Error: Invalid class index.\n");
+        return newMatrix(0, 0);
+    }
+
+    t_class targetClass = part->classes[class_index];
+    int size = targetClass.nbVertices;
+
+    t_matrix sub = newMatrix(size, size);
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            int global_row = targetClass.vertices[i]->id - 1;
+            int global_col = targetClass.vertices[j]->id - 1;
+
+            sub.value[i][j] = matrix.value[global_row][global_col];
+        }
+    }
+
+    return sub;
 }
