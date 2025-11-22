@@ -8,5 +8,7 @@ add_executable(TI_301_PJT
         utils.c
         list.c
         hasse.c
+        tarjan.c
+        matrix.c
 )
 

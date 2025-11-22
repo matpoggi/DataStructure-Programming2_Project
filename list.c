@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
-#include "utils.c"
+#include "utils.h"
 
 t_cell* createCell(int end, float proba) {
     /**
@@ -164,7 +164,7 @@ adjacency_list readGraph(const char *filename) {
 
     }
     for (int i = 0; i < adjlist.size; i++) {
-        adjlist.array[i] = *sortList(adjlist.array[i]);
+        adjlist.array[i] = sortList(adjlist.array[i]);
     }
     fclose(file);
     printf("[readGraph---] Done reading file.\n---------------------------------------");
@@ -279,13 +279,10 @@ void removeCell(t_cell *cell, t_list *list) {
 }
 
 
-t_list *sortList(t_list list) {
-    t_list *sorted_list = malloc(sizeof(t_list));
-    if (!sorted_list) {
-        return NULL;
-    }
+// Dans list.c
 
-    *sorted_list = createEmptyList();
+t_list sortList(t_list list) {
+    t_list sorted_list = createEmptyList();
 
     while (list.head != NULL) {
         t_cell *lowest_cell = list.head;
@@ -298,7 +295,8 @@ t_list *sortList(t_list list) {
             current_cell = current_cell->next;
         }
 
-        addCell(sorted_list, lowest_cell->end, lowest_cell->proba);
+        addCell(&sorted_list, lowest_cell->end, lowest_cell->proba);
+
         removeCell(lowest_cell, &list);
     }
 

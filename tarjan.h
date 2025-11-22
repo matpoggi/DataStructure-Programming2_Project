@@ -1,7 +1,7 @@
 #ifndef TARJAN_H
 #define TARJAN_H
 #define NBMAX 50
-#include "adjacencyList.h"
+#include "list.h"
 
 typedef struct s_tarjanVertex {
     int id;
@@ -26,11 +26,11 @@ typedef struct s_stack {
     int nbValues;
 } t_stack;
 
-t_tarjanVertex* initTarjanVertices(t_adjacencyList*);
+t_tarjanVertex* initTarjanVertices(adjacency_list*);
 void push(t_stack *stack, t_tarjanVertex* vertex);
 t_tarjanVertex* pop(t_stack *stack);
-void parcours(int v, t_adjacencyList *graph, t_tarjanVertex *vertices, t_stack *stack, int *indexPtr, t_partition *partition);
-t_partition *tarjan(t_adjacencyList *graph);
+void parcours(int v, adjacency_list *graph, t_tarjanVertex *vertices, t_stack *stack, int *indexPtr, t_partition *partition);
+t_partition *tarjan(adjacency_list *graph);
 void displayPartition(t_partition *partition);
 
 #endif //TARJAN_H

@@ -27,6 +27,6 @@ adjacency_list readGraph(const char *filename);
 void isMarkov (adjacency_list adjlist);
 void drawGraph(adjacency_list adjlist);
 void removeCell(t_cell *cell, t_list *list);
-t_list *sortList(t_list list);
+t_list sortList(t_list list);
 
 #endif
